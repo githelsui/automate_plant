@@ -1,5 +1,5 @@
 int sensor = A0;
-const int threshold = 34;
+const int threshold = -5; //positive lvls > 0 = wet, negative lvls = dry
 const int relay = 5;
 const int led = 16;
 int lvl;
@@ -11,8 +11,25 @@ void setup() {
     pinMode(led, OUTPUT);
     pinMode(relay, OUTPUT);
     Serial.println("Autoplant");
-    digitalWrite(led, LOW);
+    digitalWrite(led, HIGH);
     delay(1000);
+}
+
+void flash(){
+    Serial.println("Watering Plant");
+    delay(500);  
+    digitalWrite(led, LOW);
+    delay(500); 
+    digitalWrite(led, HIGH);
+    delay(500); 
+    digitalWrite(led, LOW);
+    delay(500); 
+    digitalWrite(led, HIGH);
+    delay(500);  
+    digitalWrite(led, LOW);
+    delay(500); 
+    digitalWrite(led, HIGH);
+    delay(5000); 
 }
 
 void loop() {
@@ -25,19 +42,18 @@ void loop() {
   if(lvl < threshold){
     digitalWrite(relay, HIGH);
     Serial.println("Pump on");
-    delay(2000);  
+    delay(1000);  
+    flash();  
     digitalWrite(relay, LOW);
-    digitalWrite(led, LOW);
-    digitalWrite(led, HIGH);
-    digitalWrite(led, LOW);
-    digitalWrite(led, HIGH);
-    Serial.println("Pump off");
-    delay(2000);
+        Serial.println("Pump off");
+    delay(1000);
   } else {
+    digitalWrite(led, LOW);
     digitalWrite(relay, LOW);
     Serial.println("Pump off");
     delay(1000);
   }
-  delay(1000);
-  //delay(345600); //check every 4 days
+//  delay(1000); //testing
+  Serial.println("Will check moisture level again in 3 more days!");
+  delay(259200000); //check every 3 days
 }
